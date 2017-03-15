@@ -14,7 +14,7 @@ ekf2 start
 #
 fw_att_control start
 #fw_pos_control_l1 start
-bf_pos_control start
+#bf_pos_control start
 
 #
 # Misc apps
