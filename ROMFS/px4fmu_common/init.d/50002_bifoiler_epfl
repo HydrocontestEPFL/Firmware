@@ -5,7 +5,7 @@
 # @type Boat
 #
 # @maintainer Yoann Lapijover <yoann.lapijover@epfl.ch>
-# @co-maintainer Benjamin Bonnal <benjamin.bonnal@epfl.ch>
+# @maintainer Benjamin Bonnal <benjamin.bonnal@epfl.ch>
 #
 
 sh /etc/init.d/rc.boat_defaults
