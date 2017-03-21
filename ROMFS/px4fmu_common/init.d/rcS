@@ -770,6 +770,34 @@ then
 	fi
 
 	#
+	# Boat setup
+	#
+	if [ $VEHICLE_TYPE == boat ]
+	then
+		echo "[i] BOAT"
+
+		if [ $MIXER == none ]
+		then
+			# Set default mixer
+			set MIXER IO_pass
+		fi
+
+		if [ $MAV_TYPE == none ]
+		then
+			# Use MAV_TYPE = 11 (boat) if not defined - This number is defined in the msg folder
+			set MAV_TYPE 11
+		fi
+
+		param set MAV_TYPE $MAV_TYPE
+
+		# Load mixer and configure outputs
+		sh /etc/init.d/rc.interface
+
+		# Start standard boats apps
+		sh /etc/init.d/rc.boat_apps
+	fi
+
+	#
 	# Multicopters setup
 	#
 	if [ $VEHICLE_TYPE == mc ]
