@@ -543,7 +543,7 @@ PARAM_DEFINE_FLOAT(COM_ARM_EKF_AB, 5.0e-3f);
  * @decimal 5
  * @increment 0.0001
  */
-PARAM_DEFINE_FLOAT(COM_ARM_EKF_GB, 8.7e-4f);
+PARAM_DEFINE_FLOAT(COM_ARM_EKF_GB, 0.0017); //4f origin
 
 /**
  * Maximum accelerometer inconsistency between IMU units that will allow arming
