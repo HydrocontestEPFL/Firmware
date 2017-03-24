@@ -57,21 +57,11 @@ The scaling factor for roll inputs is adjusted to implement differential travel
 for the elevons.
 
 M: 2
-O:      7180  3580      -1580 -7820 2000
+O:      7180  3580      0 -10000  10000
 S: 0 0  -10000 -10000      0 -10000  10000
 S: 0 1  10000  10000      0 -10000  10000
 
 M: 2
-O:      3580  7180      -560 -4140 6260
+O:      3580  7180      0 -10000  10000
 S: 0 0  -10000 -10000      0 -10000  10000
 S: 0 1  -10000 -10000      0 -10000  10000
-
-Main elevon correction
--------------
-We on ly want to correct the roll : one input
-
-The mixer is configure as a pass throught.
-
-M: 1
-O:      4320  4320      -40 -4360  4280
-S: 0 6  10000  10000      0 -10000  10000

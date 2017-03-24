@@ -42,4 +42,3 @@ set PWM_MIN p:PWM_MIN
 set PWM_MAX p:PWM_MAX
 
 set MIXER bifoiler
-set PWM_OUT 1234

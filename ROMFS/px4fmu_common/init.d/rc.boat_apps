@@ -13,10 +13,8 @@ ekf2 start
 # Start attitude controller
 #
 fw_att_control start
-#fw_pos_control_l1 start
-bf_pos_control start
+
 
 #
 # Misc apps
 #
-ems22 start
