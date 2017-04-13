@@ -21,11 +21,11 @@ class XMLOutput():
     def __init__(self, groups, board, inject_xml_file_name):
         xml_parameters = ET.Element("parameters")
         xml_version = ET.SubElement(xml_parameters, "version")
-        xml_version.text = "3"
+        xml_version.text = "4"
         xml_version = ET.SubElement(xml_parameters, "parameter_version_major")
-        xml_version.text = "1"
+        xml_version.text = "2"
         xml_version = ET.SubElement(xml_parameters, "parameter_version_minor")
-        xml_version.text = "9"
+        xml_version.text = "10"
         importtree = ET.parse(inject_xml_file_name)
         injectgroups = importtree.getroot().findall("group")
         for igroup in injectgroups:
@@ -56,7 +56,7 @@ class XMLOutput():
                             xml_field.text = value
                 if last_param_name != param.GetName():
                     board_specific_param_set = False
-                
+
                 if len(param.GetEnumCodes()) > 0:
                     xml_values = ET.SubElement(xml_param, "values")
                     for code in param.GetEnumCodes():

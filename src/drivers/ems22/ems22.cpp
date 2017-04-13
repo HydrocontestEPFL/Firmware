@@ -12,7 +12,7 @@
  *    notice, this list of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
- * 3. Neither the name Hydrocontest Team EPFL nor the names of its 
+ * 3. Neither the name Hydrocontest Team EPFL nor the names of its
  *	  contributors may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
  *
@@ -177,7 +177,7 @@ private:
 	void				set_minimum_distance(float min);
 	void				set_maximum_distance(float max);
 	float				get_minimum_distance();
-	float				get_maximum_distance();		
+	float				get_maximum_distance();
 
 	/**
 	* Perform a poll cycle; collect from the previous measurement
@@ -560,9 +560,9 @@ EMS22::collect()
 
 	param_get(param_find("DRV_ENC_OFFSET"), &_offset_over_1024);
 
-	_angle_over_1024 = 1024 - ((val[1] << 8) | val[0]) + 349;
+	_angle_over_1024 = 1024 - ((val[1] << 8) | val[0]) + _offset_over_1024;
 	float distance_m = cosf(math::radians(float(_angle_over_1024) / 1024.f * 360.f)) * 0.58f;
-	
+
 	static float distance_buf[10];
 	static int index = 0;
 	distance_buf[index] = distance_m/10.f;
@@ -848,6 +848,8 @@ test()
 
 		warnx("periodic read %u", i);
 		warnx("measurement: %0.3f", (double)report.current_distance);
+		warnx("minimum distance: %0.3f", (double)report.min_distance);
+		warnx("maximum distance: %0.3f", (double)report.max_distance);
 		warnx("time:        %llu", report.timestamp);
 	}
 

@@ -46,6 +46,296 @@
  */
 
 /**
+ * Lift control Time Constant
+ *
+ * This defines the latency between a speed step input and the achieved setpoint
+ * (inverse to a P gain). Half a second is a good start value and fits for
+ * most average systems. Smaller systems may require smaller values, but as
+ * this will wear out servos faster, the value should only be decreased as
+ * needed.
+ *
+ * @unit s
+ * @min 0.4
+ * @max 1.0
+ * @decimal 2
+ * @increment 0.05
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_L_TC, 0.4f);
+
+/**
+ * Lift Rate Proportional Gain
+ *
+ * This defines the proportionnal gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_LR_P, 0.4f);
+
+/**
+ * Lift Rate Integrator Gain
+ *
+ * This defines the integral gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_LR_I, 0.4f);
+
+/**
+ * Lift Negative Rate Proportional Gain
+ *
+ * This defines the proportionnal gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_LR_P_N, 0.4f);
+
+/**
+ * Lift Negative Rate Integrator Gain
+ *
+ * This defines the integral gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_LR_I_N, 0.4f);
+
+/**
+ * Lift control max ramp
+ *
+ * This defines the maximum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_L_MAR, 0.4f);
+
+/**
+ * Lift control max ramp
+ *
+ * This defines the minimum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_L_MIR, 0.4f);
+
+/**
+ * Lift control intergrator max
+ *
+ * This defines the minimum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_LR_IMAX, 0.2f);
+
+/**
+ * Lift control feedforward
+ *
+ * This defines the minimum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_LR_FF, 0.2f);
+
+/**
+ * Speed control Time Constant
+ *
+ * This defines the latency between a speed step input and the achieved setpoint
+ * (inverse to a P gain). Half a second is a good start value and fits for
+ * most average systems. Smaller systems may require smaller values, but as
+ * this will wear out servos faster, the value should only be decreased as
+ * needed.
+ *
+ * @unit s
+ * @min 0.4
+ * @max 1.0
+ * @decimal 2
+ * @increment 0.05
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_S_TC, 0.4f);
+
+/**
+ * Speed Rate Proportional Gain
+ *
+ * This defines the proportionnal gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_SR_P, 0.4f);
+
+/**
+ * Speed Rate Integrator Gain
+ *
+ * This defines the integral gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_SR_I, 0.4f);
+
+/**
+ * Speed Rate feed forward Gain
+ *
+ * This defines the integral gain to apply
+ * to the speed error. The error size is limited by
+ * the time constant (maximum ramp).
+ *
+ * @unit %/m/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_SR_FF, 0.7f);
+
+/**
+ * Speed control max ramp
+ *
+ * This defines the maximum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_S_MAR, 0.4f);
+
+/**
+ * Speed control max ramp
+ *
+ * This defines the minimum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_S_MIR, 0.4f);
+
+/**
+ * Speed control max ramp
+ *
+ * This defines the minimum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min 0.001
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_SR_IMAX, 0.2f);
+
+/**
+ * Maximum allowed yaw rate
+ *
+ * This defines the minimum ramp allowed. It protect
+ * the boat to big control input and the servo from
+ * big changes. It also reduce reactivity.
+ *
+ * @unit %/m/s/s
+ * @min -10.0
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_MAN_YR_MAX, 0.0f);
+
+/**
+ * Roll offset depending on the yaw rate
+ *
+ * Définitions
+ *
+ * @unit /m/s/s
+ * @min -10.0
+ * @max 10.0
+ * @decimal 3
+ * @increment 0.001
+ * @group Bifoiler Control
+ */
+PARAM_DEFINE_FLOAT(BF_R_YR_SCAL, 0.0f);
+
+/**
  * Attitude Roll Time Constant
  *
  * This defines the latency between a roll step input and the achieved setpoint
