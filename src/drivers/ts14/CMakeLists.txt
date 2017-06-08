@@ -31,13 +31,13 @@
 #
 ############################################################################
 px4_add_module(
-	MODULE drivers__ems22
-	MAIN ems22
+	MODULE drivers__ts14
+	MAIN ts14
 	STACK_MAIN 1200
 	COMPILE_FLAGS
 		-Os
 	SRCS
-		ems22.cpp
+		ts14.cpp
 	DEPENDS
 		platforms__common
 	)

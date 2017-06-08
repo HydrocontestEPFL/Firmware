@@ -1929,7 +1929,7 @@ Sensors::adc_poll(struct sensor_combined_s &raw)
 				_battery.updateBatteryStatus(t, bat_voltage_v, bat_current_a, ctrl.control[actuator_controls_s::INDEX_THROTTLE],
 							     _armed, &_battery_status);
 
-				/* announce the battery status if needed, just publish else */
+				/* announce the battery status if needed, just publish else*/
 				if (_battery_pub != nullptr) {
 					orb_publish(ORB_ID(battery_status), _battery_pub, &_battery_status);
 

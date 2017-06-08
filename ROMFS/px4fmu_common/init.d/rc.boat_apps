@@ -18,4 +18,5 @@ fw_att_control start
 #
 # Misc apps
 #
-ems22 start
+#ems22 start
+PWRHC start

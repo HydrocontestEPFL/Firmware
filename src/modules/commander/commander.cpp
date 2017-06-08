@@ -2215,7 +2215,7 @@ int commander_thread_main(int argc, char *argv[])
 		/* update battery status */
 		orb_check(battery_sub, &updated);
 
-		if (updated) {
+		if (false) {//warning might go crazy
 			orb_copy(ORB_ID(battery_status), battery_sub, &battery);
 
 			/* only consider battery voltage if system has been running 6s (usb most likely detected) and battery voltage is valid */

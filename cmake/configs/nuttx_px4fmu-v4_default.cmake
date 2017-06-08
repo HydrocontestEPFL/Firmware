@@ -51,6 +51,8 @@ set(config_module_list
 	drivers/bmi160
 	drivers/tap_esc
 	drivers/ems22
+	drivers/pwrHC
+	#drivers/ts14
 
 	#
 	# System commands
