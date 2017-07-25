@@ -769,7 +769,7 @@ void stop()
 void
 test()
 {
-  /*
+
 	struct battery_status_s report;
 	ssize_t sz;
 	int ret;
@@ -827,7 +827,7 @@ test()
 		errx(1, "failed to set default poll rate");
 	}
 
-	errx(0, "PASS");*/
+	errx(0, "PASS");
 
   int sub = orb_subscribe(ORB_ID(battery_status));
 	bool updated = false;

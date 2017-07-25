@@ -31,7 +31,7 @@ Two scalers total (output, yaw).
 The mixer is configure as a pass throught.
 
 M: 1
-O:      7040  7040      -2760 -9540  4560
+O:      7040  7040        0 -5000  5000
 S: 0 2  10000  10000      0 -10000  10000
 
 
@@ -57,11 +57,11 @@ The scaling factor for roll inputs is adjusted to implement differential travel
 for the elevons.
 
 M: 2
-O:      4000  4000      0 -15000  15000
+O:      10000  10000      0 -5000  5000
 S: 0 0  -10000 -10000      0 -10000  10000
-S: 0 1  10000  10000      0 -10000  10000
+S: 0 1  2000  2000      0 -10000  10000
 
 M: 2
-O:      4000  4000      0 -15000  15000
+O:      10000  10000      0 -5000  5000
 S: 0 0  -10000 -10000      0 -10000  10000
-S: 0 1  -10000 -10000      0 -10000  10000
+S: 0 1  -2000 -2000      0 -10000  10000

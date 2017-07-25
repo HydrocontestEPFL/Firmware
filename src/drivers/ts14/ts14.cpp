@@ -84,7 +84,7 @@
 
 /* Configuration Constants */
 #define TS14_BUS           PX4_I2C_BUS_EXPANSION
-#define TS14_BASEADDR      0x30 /* 7-bit address */
+#define TS14_BASEADDR      0x32 /* 7-bit address */
 #define TS14_DEVICE_PATH   "/dev/ultrasonic"
 
 /* Nano Registers addresses */
@@ -116,7 +116,6 @@ public:
 	virtual ssize_t		read(struct file *filp, char *buffer, size_t buflen);
 	virtual int			ioctl(struct file *filp, int cmd, unsigned long arg);
 
-	uint16_t			get_angle_over_1024();
 
 	/**
 	* Diagnostics - print some basic information about the driver.
@@ -336,11 +335,7 @@ TS14::get_maximum_distance()
 	return _max_distance;
 }
 
-uint16_t
-TS14::get_angle_over_1024()
-{
-	return _angle_over_1024;
-}
+
 
 int
 TS14::ioctl(struct file *filp, int cmd, unsigned long arg)
@@ -558,9 +553,7 @@ TS14::collect()
 	}
 
 
-
-	_angle_over_1024 = 1024 - ((val[1] << 8) | val[0]) + _offset_over_1024;
-	float distance_m = cosf(math::radians(float(_angle_over_1024) / 1024.f * 360.f)) * 0.58f;
+	float distance_m = ((val[1] << 8) | val[0]);
 
 	static float distance_buf[10];
 	static int index = 0;
@@ -576,7 +569,7 @@ TS14::collect()
 
 	report.timestamp = hrt_absolute_time();
 	/* there is no enum item for a combined LASER and ULTRASOUND which it should be */
-	report.type = distance_sensor_s::MAV_DISTANCE_SENSOR_MECHANICAL;
+	report.type = distance_sensor_s::MAV_DISTANCE_SENSOR_ULTRSASOUND;
 	report.orientation = 8;
 	report.current_distance = distance_average;
 	report.raw_distance = distance_m;
@@ -920,7 +913,7 @@ calib()
 
 	warnx("single read");
 	warnx("measurement: %0.2f m", (double)report.current_distance);
-	warnx("raw angle: %d ", g_dev->get_angle_over_1024());
+	warnx("raw dist: %d ", (int)report.distance_m);
 	warnx("time:        %llu", report.timestamp);
 }
 

@@ -1219,15 +1219,15 @@ FixedwingAttitudeControl::task_main()
 
 					// Only activate the roll control, the boat is fully
 					// manual, we just try to keep the roll to a specific angle.
-					/*roll_control_enable = true;
+					roll_control_enable = true;
 					roll_sp = _manual.y * _parameters.man_roll_max;
-					*/
 
-					lift_control_enable = true;
+
+					lift_control_enable = false;
 					lift_sp = _manual.x * 0.5f;
 
-					roll_control_enable = true;
-					roll_sp = rollFromYawRate(_manual.y * _parameters.man_yaw_rate_max, speed_body_u);
+					// roll_control_enable = true;
+					// roll_sp = rollFromYawRate(_manual.y * _parameters.man_yaw_rate_max, speed_body_u);
 
 					yaw_control_enable = true;
 					yaw_rate_sp = _manual.y * _parameters.man_yaw_rate_max;
