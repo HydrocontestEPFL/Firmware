@@ -52,7 +52,7 @@ set(config_module_list
 	drivers/tap_esc
 	drivers/ems22
 	drivers/pwrHC
-	#drivers/ts14
+	drivers/ts14
 
 	#
 	# System commands

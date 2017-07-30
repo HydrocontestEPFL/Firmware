@@ -63,8 +63,7 @@ float ECL_LiftController::control_attitude(const struct ECL_ControlData &ctl_dat
 	/* Do not calculate control signal with bad inputs */
 	if (!(PX4_ISFINITE(ctl_data.lift_setpoint) &&
 	      PX4_ISFINITE(ctl_data.roll) &&
-	      PX4_ISFINITE(ctl_data.pitch) &&
-	      PX4_ISFINITE(ctl_data.groundspeed))) {
+	      PX4_ISFINITE(ctl_data.pitch))) {
 		warnx("not controlling lift");
 		return _rate_setpoint;
 	}
@@ -91,27 +90,6 @@ float ECL_LiftController::control_attitude(const struct ECL_ControlData &ctl_dat
 
 float ECL_LiftController::control_bodyrate(const struct ECL_ControlData &ctl_data)
 {
-	/* Do not calculate control signal with bad inputs */
-	/*
-	if (!(PX4_ISFINITE(ctl_data.pitch) &&
-	      PX4_ISFINITE(ctl_data.roll_rate) &&
-	      PX4_ISFINITE(ctl_data.yaw_rate) &&
-	      PX4_ISFINITE(ctl_data.yaw_rate_setpoint) &&
-	      PX4_ISFINITE(ctl_data.airspeed_min) &&
-	      PX4_ISFINITE(ctl_data.airspeed_max) &&
-	      PX4_ISFINITE(ctl_data.scaler))) {
-		return math::constrain(_last_output, -1.0f, 1.0f);
-	}
-	*/
-
-	/*if(ctl_data.airspeed < _palp_min_speed)
-	{
-		_integrator = 0.0f;
-		_last_output = 0.0f;
-		return _last_output;
-	}*/
-
-
 
 	/* get the usual dt estimate */
 	uint64_t dt_micros = hrt_elapsed_time(&_last_run);

@@ -2572,7 +2572,7 @@ int commander_thread_main(int argc, char *argv[])
 			    	internal_state.main_state == commander_state_s::MAIN_STATE_STAB ||
 			    	internal_state.main_state == commander_state_s::MAIN_STATE_RATTITUDE ||
 			    	land_detector.landed) &&
-			    sp_man.r < -STICK_ON_OFF_LIMIT && sp_man.z < 0.1f) {
+			    sp_man.aux5 < -STICK_ON_OFF_LIMIT && sp_man.z < 0.1f) {
 
 				if (stick_off_counter > rc_arm_hyst) {
 					/* disarm to STANDBY if ARMED or to STANDBY_ERROR if ARMED_ERROR */
@@ -2605,7 +2605,7 @@ int commander_thread_main(int argc, char *argv[])
 			}
 
 			/* check if left stick is in lower right position and we're in MANUAL mode -> arm */
-			if (sp_man.r > STICK_ON_OFF_LIMIT && sp_man.z < 0.1f && status.rc_input_mode != vehicle_status_s::RC_IN_MODE_OFF ) {
+			if (sp_man.aux5 > STICK_ON_OFF_LIMIT && sp_man.z < 0.1f && status.rc_input_mode != vehicle_status_s::RC_IN_MODE_OFF ) {
 				if (stick_on_counter > rc_arm_hyst) {
 
 					/* we check outside of the transition function here because the requirement

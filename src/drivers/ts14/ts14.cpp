@@ -85,19 +85,19 @@
 /* Configuration Constants */
 #define TS14_BUS           PX4_I2C_BUS_EXPANSION
 #define TS14_BASEADDR      0x32 /* 7-bit address */
-#define TS14_DEVICE_PATH   "/dev/ultrasonic"
+#define TS14_DEVICE_PATH   "/dev/ts14"
 
 /* Nano Registers addresses */
 
 #define TS14_MEASURE_REG	0x00		/* Measure range register */
 #define TS14_WHO_AM_I_REG  0x01        /* Who am I test register */
-#define TS14_WHO_AM_I_REG_VAL 0xA1
+#define TS14_WHO_AM_I_REG_VAL 0xA2
 
 /* Device limits */
 #define TS14_MIN_DISTANCE (0.0f)
-#define TS14_MAX_DISTANCE (0.5f)
+#define TS14_MAX_DISTANCE (1.f)
 
-#define TS14_CONVERSION_INTERVAL 10000 /* 5ms */
+#define TS14_CONVERSION_INTERVAL 1000 /* 5ms */
 
 /* oddly, ERROR is not defined for c++ */
 #ifdef ERROR
@@ -128,8 +128,6 @@ protected:
 private:
 	float				_min_distance;
 	float				_max_distance;
-	uint16_t 			_angle_over_1024;
-	uint16_t			_offset_over_1024;
 	work_s				_work;
 	ringbuffer::RingBuffer		*_reports;
 	bool				_sensor_ok;
@@ -198,7 +196,7 @@ private:
 /*
  * Driver 'main' command.
  */
-extern "C" __EXPORT int TS14_main(int argc, char *argv[]);
+extern "C" __EXPORT int ts14_main(int argc, char *argv[]);
 
 TS14::TS14(int bus, int address) :
 	I2C("TS14", TS14_DEVICE_PATH, bus, address, 100000),
@@ -539,11 +537,11 @@ TS14::collect()
 	int ret = -EIO;
 
 	/* read from the sensor */
-	uint8_t val[2] = {0, 0};
+	uint8_t val[4] = {0, 0,0,0};
 
 	perf_begin(_sample_perf);
 
-	ret = transfer(nullptr, 0, &val[0], 2);
+	ret = transfer(nullptr, 0, &val[0], 4);
 
 	if (ret < 0) {
 		DEVICE_LOG("error reading from sensor: %d", ret);
@@ -553,23 +551,37 @@ TS14::collect()
 	}
 
 
-	float distance_m = ((val[1] << 8) | val[0]);
+	uint32_t raw_sens = ((val[3] << 24) |(val[2] << 16) | (val[1] << 8) | val[0]);
+
+	//uint32_t distance_m = ((val[3] << 24) |(val[2] << 16) | (val[1] << 8) | val[0]);
+
+	float distance_m = ((float)raw_sens * 0.0859536f)/1000.f;
 
 	static float distance_buf[10];
+	static float last_avg = 0.1;
 	static int index = 0;
-	distance_buf[index] = distance_m/10.f;
+
+	/* Eliminates junk. */
+	if((distance_m > 0.1f) && (distance_m <= 1.f)){
+		distance_buf[index] = distance_m/10.f;
+	}
+	else{
+		distance_buf[index] = last_avg/10.f;
+	}
+
 	index = (index + 1) % 10;
 
 	float distance_average = 0.f;
 	for (int i = 0; i < 10; ++i) {
 		distance_average += distance_buf[i];
 	}
+	last_avg = distance_average;
 
 	struct distance_sensor_s report;
 
 	report.timestamp = hrt_absolute_time();
 	/* there is no enum item for a combined LASER and ULTRASOUND which it should be */
-	report.type = distance_sensor_s::MAV_DISTANCE_SENSOR_ULTRSASOUND;
+	report.type = distance_sensor_s::MAV_DISTANCE_SENSOR_ULTRASOUND;
 	report.orientation = 8;
 	report.current_distance = distance_average;
 	report.raw_distance = distance_m;
@@ -703,7 +715,7 @@ TS14::print_info()
 /**
  * Local functions in support of the shell command.
  */
-namespace TS14
+namespace ts14
 {
 
 /* oddly, ERROR is not defined for c++ */
@@ -810,7 +822,7 @@ test()
 	}
 
 	warnx("single read");
-	warnx("measurement: %0.2f m", (double)report.current_distance);
+	warnx("measurement: %0.2f mm", (double)report.current_distance);
 	warnx("time:        %llu", report.timestamp);
 
 	/* start the sensor polling at 2Hz */
@@ -840,8 +852,7 @@ test()
 
 		warnx("periodic read %u", i);
 		warnx("measurement: %0.3f", (double)report.current_distance);
-		warnx("minimum distance: %0.3f", (double)report.min_distance);
-		warnx("maximum distance: %0.3f", (double)report.max_distance);
+		warnx("raw: %0.3f", (double)report.raw_distance);
 		warnx("time:        %llu", report.timestamp);
 	}
 
@@ -913,7 +924,6 @@ calib()
 
 	warnx("single read");
 	warnx("measurement: %0.2f m", (double)report.current_distance);
-	warnx("raw dist: %d ", (int)report.distance_m);
 	warnx("time:        %llu", report.timestamp);
 }
 

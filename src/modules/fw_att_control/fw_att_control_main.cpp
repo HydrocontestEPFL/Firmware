@@ -1193,10 +1193,10 @@ FixedwingAttitudeControl::task_main()
 					yaw_control_enable = true;
 					yaw_rate_sp = _manual.y * _parameters.man_yaw_rate_max;
 
-					/* We use the pitch as an altitude sp
-					pitch_control_enable = true;*/
-					/* The maximum altitude is 30 cm
-					pitch_sp = _manual.x * 0.30f;*/
+					/* We use the pitch as an altitude sp*/
+					pitch_control_enable = true;
+					/* The maximum altitude is 30 cm*/
+					pitch_sp = _manual.x * 0.30f;
 
 					/* reset integrals where needed */
 					if (_att_sp.roll_reset_integral) {
@@ -1223,7 +1223,7 @@ FixedwingAttitudeControl::task_main()
 					roll_sp = _manual.y * _parameters.man_roll_max;
 
 
-					lift_control_enable = false;
+					lift_control_enable = true; //set to false to prevent overload
 					lift_sp = _manual.x * 0.5f;
 
 					// roll_control_enable = true;
@@ -1315,31 +1315,10 @@ FixedwingAttitudeControl::task_main()
 					*/
 					if(roll_control_enable)
 					{
-						if(_manual.aux3 > 0.0f)
-						{
-							static float roll_tab[5];
-							static uint8_t index = 0;
-
-							_roll_ctrl.control_attitude(control_input);
-							control_input.roll_rate_setpoint = _roll_ctrl.get_desired_rate();
-							roll_tab[index] = _roll_ctrl.control_bodyrate(control_input);
-							roll_tab[index] = (PX4_ISFINITE(roll_u)) ? roll_tab[index] : 0.0f;
-
-							index = ( index + 1 ) % 5;
-
-							roll_u = 0.0f;
-							for (int a = 0; a < 5; ++a)
-							{
-								roll_u += roll_tab[a] / 5.0f;
-							}
-						}
-						else
-						{
-							_roll_ctrl.control_attitude(control_input);
-							control_input.roll_rate_setpoint = _roll_ctrl.get_desired_rate();
-							roll_u = _roll_ctrl.control_bodyrate(control_input);
-							roll_u = (PX4_ISFINITE(roll_u)) ? roll_u : 0.0f;
-						}
+						_roll_ctrl.control_attitude(control_input);
+						control_input.roll_rate_setpoint = _roll_ctrl.get_desired_rate();
+						roll_u = _roll_ctrl.control_bodyrate(control_input);
+						roll_u = (PX4_ISFINITE(roll_u)) ? roll_u : 0.0f;
 					}
 					else
 					{
@@ -1387,10 +1366,15 @@ FixedwingAttitudeControl::task_main()
 					else
 					{
 						_speed_ctrl.reset_integrator();
-						if( _manual.aux2 >= 0.0f )
-							throttle_u = _manual.z;
-						else
-							throttle_u = -_manual.z;
+						if(_manual.aux4 >= 0.0f){
+							if( _manual.aux2 >= 0.0f )
+								_actuators.control[actuator_controls_s::INDEX_THROTTLE] = _manual.z;
+							else
+								_actuators.control[actuator_controls_s::INDEX_THROTTLE] = -_manual.z;
+						}
+						else{
+							_actuators.control[actuator_controls_s::INDEX_THROTTLE] = 0;
+						}
 					}
 
 
@@ -1467,19 +1451,22 @@ FixedwingAttitudeControl::task_main()
 				_actuators.control[actuator_controls_s::INDEX_PITCH] = -_manual.x + _parameters.trim_pitch;
 				_actuators.control[actuator_controls_s::INDEX_YAW] = _manual.r + _parameters.trim_yaw;
 				/* Check if user want to go backward (AUX 2 switch) */
-				if( _manual.aux2 >= 0.0f )
-					_actuators.control[actuator_controls_s::INDEX_THROTTLE] = _manual.z;
-				else
-					_actuators.control[actuator_controls_s::INDEX_THROTTLE] = -_manual.z;
+				if(_manual.aux4 >= 0.0f){
+					if( _manual.aux2 >= 0.0f )
+						_actuators.control[actuator_controls_s::INDEX_THROTTLE] = _manual.z;
+					else
+						_actuators.control[actuator_controls_s::INDEX_THROTTLE] = -_manual.z;
+				}
+				else{
+					_actuators.control[actuator_controls_s::INDEX_THROTTLE] = 0;
+				}
+
 
 				//printf("Actuator = %f \n", (double) _actuators.control[actuator_controls_s::INDEX_THROTTLE] * 100.);
 				_actuators_alternate.control[4] = _manual.aux1;
 
 				_roll_ctrl.reset_integrator();
 			}
-
-			_actuators.control[5] = _manual.aux1;
-			_actuators.control[7] = _manual.aux3;
 
 			/* lazily publish the setpoint only once available */
 			_actuators.timestamp = hrt_absolute_time();

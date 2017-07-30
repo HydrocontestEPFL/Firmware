@@ -255,6 +255,7 @@ EMS22::init()
 
 	/* do I2C init (and probe) first */
 	if (I2C::init() != OK) {
+		DEVICE_LOG("fck");
 		goto out;
 	}
 
@@ -746,10 +747,12 @@ start()
 
 
 	if (g_dev == nullptr) {
+		errx(1, "did not create class");
 		goto fail;
 	}
 
 	if (OK != g_dev->init()) {
+		errx(1, "init failed");
 		goto fail;
 	}
 
@@ -757,6 +760,7 @@ start()
 	fd = open(EMS22_DEVICE_PATH, O_RDONLY);
 
 	if (fd < 0) {
+		errx(1, "open failed");
 		goto fail;
 	}
 
