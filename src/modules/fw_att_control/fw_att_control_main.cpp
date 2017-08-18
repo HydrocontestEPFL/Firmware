@@ -1368,12 +1368,12 @@ FixedwingAttitudeControl::task_main()
 						_speed_ctrl.reset_integrator();
 						if(_manual.aux4 >= 0.0f){
 							if( _manual.aux2 >= 0.0f )
-								_actuators.control[actuator_controls_s::INDEX_THROTTLE] = _manual.z;
+								throttle_u = _manual.z;
 							else
-								_actuators.control[actuator_controls_s::INDEX_THROTTLE] = -_manual.z;
+								throttle_u = -_manual.z;
 						}
 						else{
-							_actuators.control[actuator_controls_s::INDEX_THROTTLE] = 0;
+							throttle_u = 0;
 						}
 					}
 
