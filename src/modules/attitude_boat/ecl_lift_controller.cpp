@@ -147,8 +147,10 @@ float ECL_LiftController::control_bodyrate(const struct ECL_ControlData &ctl_dat
 	else
 		_last_output = _rate_error * _k_p_n + _integrator;
 
+#if 0
 	warnx("[Lift controller] Kp = %0.3f, Kp_n = %0.3f, Ki = %0.3f, Ki_n = %0.3f, output = %0.3f, integrator = %0.3f\n",
 		double(_k_p), double(_k_p_n), double(_k_i), double(_k_i_n), double(_last_output), double(_integrator));
+#endif
 
 	/*printf("Lift control - palpeur = %f, sp = %f, _error = %f, kp = %f, integrator = %f \n",
 		  (double) (ctl_data.palpeur_distance*1000.f), (double) (ctl_data.lift_setpoint*1000.f), (double) (_rate_error*1000.f), (double) (_k_p*1000.f));
