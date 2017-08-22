@@ -1223,8 +1223,13 @@ FixedwingAttitudeControl::task_main()
 					roll_sp = _manual.y * _parameters.man_roll_max;
 
 
-					lift_control_enable = true; //set to false to prevent overload
-					lift_sp = _manual.x * 0.5f;
+                    if (_manual.aux3 > 0.5f) {
+					    lift_control_enable = true;
+                    } else {
+					    lift_control_enable = false;
+                    }
+
+					lift_sp = (_manual.x + 1) * 0.25f;
 
 					// roll_control_enable = true;
 					// roll_sp = rollFromYawRate(_manual.y * _parameters.man_yaw_rate_max, speed_body_u);
