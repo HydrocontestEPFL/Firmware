@@ -117,7 +117,7 @@ public:
 	virtual ssize_t		read(struct file *filp, char *buffer, size_t buflen);
 	virtual int			ioctl(struct file *filp, int cmd, unsigned long arg);
 
-	uint16_t			get_angle_over_1024();
+	uint16_t			get_angle();
 
 	/**
 	* Diagnostics - print some basic information about the driver.
@@ -130,8 +130,8 @@ protected:
 private:
 	float				_min_distance;
 	float				_max_distance;
-	uint16_t 			_angle_over_1024;
-	uint16_t			_offset_over_1024;
+	uint16_t 			_angle;
+	uint16_t			_offset;
 	work_s				_work;
 	ringbuffer::RingBuffer		*_reports;
 	bool				_sensor_ok;
@@ -339,9 +339,9 @@ EMS22::get_maximum_distance()
 }
 
 uint16_t
-EMS22::get_angle_over_1024()
+EMS22::get_angle()
 {
-	return _angle_over_1024;
+	return _angle;
 }
 
 int
@@ -559,10 +559,13 @@ EMS22::collect()
 		return ret;
 	}
 
-	param_get(param_find("DRV_ENC_OFFSET"), &_offset_over_1024);
+	param_get(param_find("DRV_ENC_OFFSET"), &_offset);
 
-	_angle_over_1024 = 1024 - ((val[1] << 8) | val[0]) + _offset_over_1024;
-	float distance_m = cosf(math::radians(float(_angle_over_1024) / 1024.f * 360.f)) * 0.58f;
+	_angle = -((val[1] << 8) | val[0]); + _offset;
+
+    float angle_deg = _angle * 360f / 1024f;
+    const float rod_length = 0.58f; /* meter */
+	float distance_m = cosf(math::radians(angle_deg)) * rod_length;
 
 	static float distance_buf[10];
 	static int index = 0;
@@ -925,7 +928,7 @@ calib()
 
 	warnx("single read");
 	warnx("measurement: %0.2f m", (double)report.current_distance);
-	warnx("raw angle: %d ", g_dev->get_angle_over_1024());
+	warnx("raw angle: %d ", g_dev->get_angle());
 	warnx("time:        %llu", report.timestamp);
 }
 
