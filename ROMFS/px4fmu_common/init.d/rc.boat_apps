@@ -13,9 +13,9 @@ ekf2 start
 #
 # Misc apps
 #
-#ems22 start
+ems22 start
 #PWRHC start
-ts14 start
+#ts14 start
 
 #
 # Start attitude controller
