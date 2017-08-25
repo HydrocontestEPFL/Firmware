@@ -561,9 +561,9 @@ EMS22::collect()
 
 	param_get(param_find("DRV_ENC_OFFSET"), &_offset);
 
-	_angle = -((val[1] << 8) | val[0]); + _offset;
+	_angle = -((val[1] << 8) | val[0]) + _offset;
 
-    float angle_deg = _angle * 360f / 1024f;
+    float angle_deg = _angle * 360.f / 1024.f;
     const float rod_length = 0.58f; /* meter */
 	float distance_m = cosf(math::radians(angle_deg)) * rod_length;
 
