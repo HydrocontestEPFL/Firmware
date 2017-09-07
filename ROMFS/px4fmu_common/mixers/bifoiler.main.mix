@@ -53,15 +53,17 @@ Three scalers total (output, roll, pitch).
 On the assumption that the two elevon servos are physically reversed, the pitch
 input is inverted between the two servos.
 
+The first servo is babord the second is tribord.
+
 The scaling factor for roll inputs is adjusted to implement differential travel
 for the elevons.
 
 M: 2
-O:      10000  10000      0 -7000  8000
+O:      10000  10000      0 -6000  12000
 S: 0 0  -10000 -10000      0 -10000  10000
-S: 0 1  8000  8000      0 -10000  10000
+S: 0 1  -8000  -8000      0 -10000  10000
 
 M: 2
-O:      10000  10000      0 -7000  8000
+O:      10000  10000      -1500 -12000  6000
 S: 0 0  -10000 -10000      0 -10000  10000
-S: 0 1  -8000 -8000      0 -10000  10000
+S: 0 1  8000 8000      0 -10000  10000
