@@ -664,6 +664,10 @@ function(px4_add_common_flags)
 		-Werror=reorder
 		-Werror=uninitialized
 		-Werror=init-self
+		-Wno-implicit-fallthrough
+		-Wno-builtin-declaration-mismatch
+		-Wno-nonnull-compare
+
 		#-Wcast-qual  - generates spurious noreturn attribute warnings,
 		#               try again later
 		#-Wconversion - would be nice, but too many "risky-but-safe"

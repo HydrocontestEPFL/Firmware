@@ -43,6 +43,9 @@ PX4_ARCHWARNINGS = -Wall \
                    -Wpointer-arith \
                    -Wshadow \
                    -Wno-sign-compare \
+                   -Wno-implicit-fallthrough \
+                   -Wno-builtin-declaration-mismatch \
+                   -Wno-nonnull-compare \
                    -Wno-unused-parameter
 
 #   -Wcast-qual  - generates spurious noreturn attribute warnings, try again later
