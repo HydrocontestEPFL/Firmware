@@ -100,6 +100,9 @@ PARAM_DEFINE_INT32(DRV_ENC_OFFSET, 0);
 
 #define EMS22_CONVERSION_INTERVAL 10000 /* 5ms */
 
+/* Enable if you want a rolling average filter for the waves */
+//#define ROLLING_AVERAGE_FILTER
+
 /* oddly, ERROR is not defined for c++ */
 #ifdef ERROR
 # undef ERROR
@@ -583,8 +586,15 @@ EMS22::collect()
 	/* there is no enum item for a combined LASER and ULTRASOUND which it should be */
 	report.type = distance_sensor_s::MAV_DISTANCE_SENSOR_MECHANICAL;
 	report.orientation = 8;
+
+#ifdef ROLLING_AVERAGE_FILTER
 	report.current_distance = distance_average;
 	report.raw_distance = distance_m;
+#else
+	report.raw_distance = distance_m;
+	report.current_distance = report.raw_distance;
+#endif
+
 	report.min_distance = get_minimum_distance();
 	report.max_distance = get_maximum_distance();
 	report.covariance = 0.0f;
